@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1df2081b-04e9-49aa-9710-d242479c25a9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Distributed Trusting Nodes.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Hamilton_County_Sheriff.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Distributed Trusting Nodes/DifferentialTrustingNode.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Distributed Trusting Nodes/DifferentialTrustingNode_Stub.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Distributed Trusting Nodes/TrustingNodes.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Distributed Trusting Nodes/TrustingNodesAgreggator.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server.policy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/DifferentialTrustingNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TrustingNodes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TrustingNodesAgreggator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,7 +27,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.rmicompiler" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -91,7 +78,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1574876145722</updated>
-      <workItem from="1574876148943" duration="25413000" />
+      <workItem from="1574876148943" duration="26020000" />
     </task>
     <servers />
   </component>
