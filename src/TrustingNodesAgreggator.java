@@ -16,27 +16,27 @@ public class TrustingNodesAgreggator {
 
     private static TrustingNodes differentialTrustingNode;
 
-    public void setTrustValue1(int trustValue1) {
+    private void setTrustValue1(int trustValue1) {
         this.trustValue1 = trustValue1;
     }
 
-    public void setTrustValue2(int trustValue2) {
+    private void setTrustValue2(int trustValue2) {
         this.trustValue2 = trustValue2;
     }
 
-    public void setTrustValue3(int trustVAlue3) {
+    private void setTrustValue3(int trustVAlue3) {
         this.trustVAlue3 = trustVAlue3;
     }
 
-    public int getTrustValue1() {
+    private int getTrustValue1() {
         return trustValue1;
     }
 
-    public int getTrustValue2() {
+    private int getTrustValue2() {
         return trustValue2;
     }
 
-    public int getTrustValue3() {
+    private int getTrustValue3() {
         return trustVAlue3;
     }
 
@@ -64,6 +64,7 @@ public class TrustingNodesAgreggator {
                         }
                     };
 
+                    //differentialTrustingNode can be replaced with the other trust nodes that will be created
                     Runnable getTrustValue2 = () -> {
                         try {
                             final int value2 = differentialTrustingNode.recordScore(message);
@@ -73,6 +74,7 @@ public class TrustingNodesAgreggator {
                         }
                     };
 
+                    //differentialTrustingNode can be replaced with the other trust nodes that will be createdgit
                     Runnable getTrustValue3 = () -> {
                         try {
                             final int value3 = differentialTrustingNode.recordScore(message);
@@ -89,11 +91,7 @@ public class TrustingNodesAgreggator {
                 endTime = System.nanoTime();
                 processingTime = endTime-startTime;
                 processingTime = TimeUnit.NANOSECONDS.toMillis(processingTime);
-                if (processingTime < 100) {
-                    waiting = true;
-                } else {
-                    waiting = false;
-                }
+                waiting = processingTime < 100;
 
                 if (waiting) {
                     if ((getTrustValue1() != 0) && (getTrustValue2() != 0) && (getTrustValue3() != 0)) {
@@ -125,9 +123,6 @@ public class TrustingNodesAgreggator {
         }
         saveToOutputFormat(outputDataStructure, fileName);
     }
-
-
-
 
     private void saveToOutputFormat(Queue<String> outputDataStructure, String fileName) {
         String name = "processed_"+fileName;
