@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1df2081b-04e9-49aa-9710-d242479c25a9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/TrustNodeUsersInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DifferentialTrustingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DifferentialTrustingNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrustingNodes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrustingNodes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrustingNodesAgreggator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrustingNodesAggregator.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,6 +25,11 @@
   </component>
   <component name="ProjectId" id="1UD12fAHikoUCf6pEGq3AG3b2ct" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -35,18 +41,6 @@
       <recent name="D:\OneDrive\Programming\IUPUI\Distributed Trusting Nodes" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager" selected="Application.TrustingNodesAgreggator">
     <configuration name="DifferentialTrustingNode" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="DifferentialTrustingNode" />
@@ -57,7 +51,7 @@
       </method>
     </configuration>
     <configuration name="TrustingNodesAgreggator" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="TrustingNodesAgreggator" />
+      <option name="MAIN_CLASS_NAME" value="TrustingNodesAggregator" />
       <module name="Distributed Trusting Nodes" />
       <option name="VM_PARAMETERS" value="-Djava.security.policy=server.policy" />
       <method v="2">
@@ -68,6 +62,18 @@
       <item itemvalue="Application.DifferentialTrustingNode" />
       <item itemvalue="Application.TrustingNodesAgreggator" />
     </list>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -81,6 +87,9 @@
       <updated>1574876145722</updated>
       <workItem from="1574876148943" duration="29614000" />
       <workItem from="1575228210317" duration="717000" />
+      <workItem from="1575421267577" duration="93000" />
+      <workItem from="1575421614171" duration="28000" />
+      <workItem from="1575421655515" duration="8327000" />
     </task>
     <servers />
   </component>
@@ -99,5 +108,77 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1629" height="241" key="GridCell.Tab.0.bottom" timestamp="1575430262004">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="241" key="GridCell.Tab.0.bottom/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575430262004" />
+    <state width="1629" height="241" key="GridCell.Tab.0.center" timestamp="1575430262000">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="241" key="GridCell.Tab.0.center/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575430262000" />
+    <state width="1629" height="241" key="GridCell.Tab.0.left" timestamp="1575430262000">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="241" key="GridCell.Tab.0.left/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575430262000" />
+    <state width="1629" height="241" key="GridCell.Tab.0.right" timestamp="1575430262003">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="241" key="GridCell.Tab.0.right/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575430262003" />
+    <state width="1629" height="418" key="GridCell.Tab.1.bottom" timestamp="1575429806325">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="418" key="GridCell.Tab.1.bottom/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575429806325" />
+    <state width="1629" height="418" key="GridCell.Tab.1.center" timestamp="1575429806324">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="418" key="GridCell.Tab.1.center/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575429806324" />
+    <state width="1629" height="418" key="GridCell.Tab.1.left" timestamp="1575429806324">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="418" key="GridCell.Tab.1.left/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575429806324" />
+    <state width="1629" height="418" key="GridCell.Tab.1.right" timestamp="1575429806325">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="418" key="GridCell.Tab.1.right/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575429806325" />
+    <state width="1629" height="418" key="GridCell.Tab.2.bottom" timestamp="1575429806326">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="418" key="GridCell.Tab.2.bottom/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575429806326" />
+    <state width="1629" height="418" key="GridCell.Tab.2.center" timestamp="1575429806325">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="418" key="GridCell.Tab.2.center/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575429806325" />
+    <state width="1629" height="418" key="GridCell.Tab.2.left" timestamp="1575429806325">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="418" key="GridCell.Tab.2.left/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575429806325" />
+    <state width="1629" height="418" key="GridCell.Tab.2.right" timestamp="1575429806325">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state width="1629" height="418" key="GridCell.Tab.2.right/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575429806325" />
+    <state x="-2090" y="-10" key="com.intellij.ide.util.TipDialog" timestamp="1575421673242">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
+    </state>
+    <state x="-2090" y="-10" key="com.intellij.ide.util.TipDialog/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575421673242" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/TrustingNodesAggregator.java</url>
+          <line>168</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="getTrustValue1()" language="JAVA" />
+        <watch expression="getTrustValue2()" language="JAVA" />
+        <watch expression="getTrustValue3()" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

@@ -1,21 +1,22 @@
+import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 public class DifferentialTrustingNode extends UnicastRemoteObject implements TrustingNodes, Serializable {
     private static final long serialVersionUID = 1001L;
 
-    List<String> sureEvents;
-    List<String> highProbabilityEvents;
+    private List<String> sureEvents;
+    private List<String> highProbabilityEvents;
 
-    public DifferentialTrustingNode() throws RemoteException {
+    private DifferentialTrustingNode() throws RemoteException {
         super();
         this.sureEvents = new ArrayList<>(Arrays.asList("TRAFFIC STOP", "VIN CHECK", "DIRECTED PATROL", "COURT ORDERED PROPETY HOLD", "DEATH INVESTIGATION", "ESCORT"));
         this.highProbabilityEvents = new ArrayList<>(Arrays.asList("ACC SINKING VEH", "ACCELERATOR STUCK", "ACCIDENT- HIT & RUN PERSONAL INJURY", "ACCIDENT- HIT & RUN PROPERTY DAMAGE",
@@ -24,20 +25,22 @@ public class DifferentialTrustingNode extends UnicastRemoteObject implements Tru
                 "THEFT", "THEFT FROM VEHICLE", "TOW RELEASE", "WEAPONS COMPLAINT"));
     }
 
-    public List<String> getSureEvents() {
+    private List<String> getSureEvents() {
         return sureEvents;
     }
 
-    public List<String> getHighProbabilityEvents() {
+    private List<String> getHighProbabilityEvents() {
         return highProbabilityEvents;
     }
 
 
     @Override
-    public int recordScore(String recordEntry) throws RemoteException {
-        String[] splitRecord = recordEntry.split(",", 7);
+    public int evaluateDataEntry(String dataEntryToBeProcessed) throws RemoteException {
+        //System.out.println("Request received!");
+        String decryptedMessage = decryptReceivedMessage(dataEntryToBeProcessed);
+        String[] splitRecord = decryptedMessage.split(",", 7);
         String typeOfEvent = splitRecord[5];
-        //System.out.println("recordEntry: \n"+recordEntry);
+        //System.out.println("decryptedMessage: \n"+decryptedMessage);
         //System.out.println("typeOfEvent: "+typeOfEvent);
         Random rand = new Random();
         if (getSureEvents().contains(typeOfEvent)) {
@@ -59,6 +62,26 @@ public class DifferentialTrustingNode extends UnicastRemoteObject implements Tru
 
         return -1;
     }
+
+    //This method decrypt a string
+    private String decryptReceivedMessage (String message) {
+        String secret = "qwertyuiopasdfgh";
+        byte[] decodedKey = Base64.getDecoder().decode(secret);
+        SecretKey secretKey;
+
+        try {
+            Cipher myCipher = Cipher.getInstance("AES");
+            secretKey = new SecretKeySpec(Arrays.copyOf(decodedKey, 16), "AES");
+            myCipher.init(Cipher.DECRYPT_MODE, secretKey);
+            byte[] bytesToBeDecrypted = Base64.getDecoder().decode(message);
+            byte[] decryptedBytes = myCipher.doFinal(bytesToBeDecrypted);
+            return new String(decryptedBytes);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
     public static void main(String[] args) {
 
