@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class TrustingNodesAggregator {
     private static ExecutorService trustNodesExecutor = Executors.newFixedThreadPool(4);
     private int trustValue1, trustValue2, trustValue3;
+    private Set<Integer> selectedTrust;
 
     private static TrustingNodes differentialTrustingNode;
 
@@ -24,6 +25,7 @@ public class TrustingNodesAggregator {
         this.trustValue1 = 0;
         this.trustValue2 = 0;
         this.trustValue3 = 0;
+        this.selectedTrust = new HashSet<>();
     }
 
     private void setTrustValue1(int trustValue1) {
@@ -48,6 +50,10 @@ public class TrustingNodesAggregator {
 
     private int getTrustValue3() {
         return trustValue3;
+    }
+
+    public Set<Integer> getSelectedTrust() {
+        return selectedTrust;
     }
 
     private void processData(String fileName) {
@@ -164,6 +170,11 @@ public class TrustingNodesAggregator {
 
     private int selectTrustType(Map<Integer, String> typesOfTrustSupportedByNode) {
         System.out.println("Types of Trust supported by the node: "+ typesOfTrustSupportedByNode);
+        //This a stub functionality that needs to be extended: to avoid running on multiple nodes the same type of trust
+        //If a trust type has been selected it is added to selectedTrust Set and for the other nodes
+        //the user shouldn't have that functionality available for selection
+        if (!getSelectedTrust().contains(1))
+            getSelectedTrust().add(1);
         return 1;
     }
 
