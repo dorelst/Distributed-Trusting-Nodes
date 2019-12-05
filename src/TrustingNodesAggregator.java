@@ -18,7 +18,7 @@ public class TrustingNodesAggregator {
     private int trustValue1, trustValue2, trustValue3;
     private Set<Integer> selectedTrust;
 
-    private static TrustingNodes differentialTrustingNode;
+    private static TrustingNodes differentialTrustingNode, secondTrustingNode, thirdTrustingNode;
 
     private TrustingNodesAggregator() {
         super();
@@ -59,16 +59,24 @@ public class TrustingNodesAggregator {
     private void processData(String fileName) {
         Queue<String> inputDataStructure = readFromDataSource(fileName);
         Queue<String> outputDataStructure = new ArrayDeque<>();
-        Map<Integer, String> typesOfTrustSupportedByNode;
-        int trustType=1;
+        Map<Integer, String> typesOfTrustSupportedByNode1, typesOfTrustSupportedByNode2, typesOfTrustSupportedByNode3;
+        int trustType1 = 1;
+        int trustType2 = 1;
+        int trustType3 = 1;
         try {
-            typesOfTrustSupportedByNode = differentialTrustingNode.requestTypesOfTrustSupportedByNode();
-            trustType = selectTrustType(typesOfTrustSupportedByNode);
+            typesOfTrustSupportedByNode1 = differentialTrustingNode.requestTypesOfTrustSupportedByNode();
+            trustType1 = selectTrustType(typesOfTrustSupportedByNode1);
+            typesOfTrustSupportedByNode2 = secondTrustingNode.requestTypesOfTrustSupportedByNode();
+            trustType2 = selectTrustType(typesOfTrustSupportedByNode2);
+            typesOfTrustSupportedByNode3 = thirdTrustingNode.requestTypesOfTrustSupportedByNode();
+            trustType3 = selectTrustType(typesOfTrustSupportedByNode3);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
 
-        final int trustTypeSelector =  trustType;
+        final int trustTypeSelector1 =  trustType1;
+        final int trustTypeSelector2 =  trustType2;
+        final int trustTypeSelector3 =  trustType3;
 
         //The first line read is the table header that needs to be skipped;
         String inputData = inputDataStructure.poll();
@@ -94,7 +102,7 @@ public class TrustingNodesAggregator {
 
                     trustNodesExecutor.submit(() -> {
                         try {
-                            final int value1 = differentialTrustingNode.evaluateDataEntry(message, trustTypeSelector);
+                            final int value1 = differentialTrustingNode.evaluateDataEntry(message, trustTypeSelector1);
                             setTrustValue1(value1);
                         } catch (RemoteException e) {
                             e.printStackTrace();
@@ -104,7 +112,7 @@ public class TrustingNodesAggregator {
                     //differentialTrustingNode can be replaced with the other trust nodes that will be created
                     trustNodesExecutor.submit(() -> {
                         try {
-                            final int value2 = differentialTrustingNode.evaluateDataEntry(message, trustTypeSelector+1);
+                            final int value2 = secondTrustingNode.evaluateDataEntry(message, trustTypeSelector2);
                             setTrustValue2(value2);
                         } catch (RemoteException e) {
                             e.printStackTrace();
@@ -114,7 +122,7 @@ public class TrustingNodesAggregator {
                     //differentialTrustingNode can be replaced with the other trust nodes that will be created
                     trustNodesExecutor.submit(() -> {
                         try {
-                            final int value3 = differentialTrustingNode.evaluateDataEntry(message, trustTypeSelector+2);
+                            final int value3 = thirdTrustingNode.evaluateDataEntry(message, trustTypeSelector3);
                             setTrustValue3(value3);
                         } catch (RemoteException e) {
                             e.printStackTrace();
@@ -173,9 +181,22 @@ public class TrustingNodesAggregator {
         //This a stub functionality that needs to be extended: to avoid running on multiple nodes the same type of trust
         //If a trust type has been selected it is added to selectedTrust Set and for the other nodes
         //the user shouldn't have that functionality available for selection
-        if (!getSelectedTrust().contains(1))
-            getSelectedTrust().add(1);
-        return 1;
+        Random rand = new Random();
+        boolean selectATrust = true;
+        int trustType;
+        do {
+            trustType = rand.nextInt(3)+1;
+            //System.out.println("trustType = "+trustType);
+            if (!getSelectedTrust().contains(trustType)) {
+                getSelectedTrust().add(trustType);
+                selectATrust = false;
+            }
+
+        } while (selectATrust);
+
+        //System.out.println("selected Trust = "+getSelectedTrust());
+
+        return trustType;
     }
 
     private void saveToOutputFormat(Queue<String> outputDataStructure, String fileName) {
@@ -235,11 +256,19 @@ public class TrustingNodesAggregator {
         System.setSecurityManager(new SecurityManager());
         try {
             System.out.println("Looking for the Server");
-            String name = "//DStoian-LEN/DifferentialTrustingNode";
+            String name1 = "//in-csci-rrpc02.cs.iupui.edu/DifferentialTrustingNode";
+            String name2 = "//in-csci-rrpc03.cs.iupui.edu/SecondTrustingNode";
+            String name3 = "//in-csci-rrpc04.cs.iupui.edu/SecondTrustingNode";
+            //String name1 = "//DStoian-LEN/DifferentialTrustingNode";
+            //String name2 = "//DStoian-HP/SecondTrustingNode";
             //String name = "//Doru-PC/DifferentialTrustingNode";
             //String name = "//LAPTOP-GDTMA4IQ/DifferentialTrustingNode";
-            differentialTrustingNode = (TrustingNodes) Naming.lookup(name);
-            System.out.println("Binding to the server");
+            differentialTrustingNode = (TrustingNodes) Naming.lookup(name1);
+            System.out.println("Binding to the differentialTrustingNode server");
+            secondTrustingNode = (TrustingNodes) Naming.lookup(name2);
+            System.out.println("Binding to the secondTrustingNode server");
+            thirdTrustingNode = (TrustingNodes) Naming.lookup(name3);
+            System.out.println("Binding to the thirdTrustingNode server");
             //For now the file name to be processed is hard coded
             String fileName = "Hamilton_County_Sheriff.csv";
             TrustingNodesAggregator trustingNodesAggregator = new TrustingNodesAggregator();
