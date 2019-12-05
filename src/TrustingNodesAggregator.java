@@ -146,6 +146,7 @@ public class TrustingNodesAggregator {
             //System.out.println("Entry line has been processed");
         }
         System.out.println("File processed");
+        trustNodesExecutor.shutdown();
 
         saveToOutputFormat(outputDataStructure, fileName);
 
@@ -220,7 +221,6 @@ public class TrustingNodesAggregator {
         } catch (RemoteException | NotBoundException | MalformedURLException ex) {
             ex.printStackTrace();
         }
-        trustNodesExecutor.shutdown();
     }
 
 }
