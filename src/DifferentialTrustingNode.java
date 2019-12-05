@@ -15,6 +15,7 @@ public class DifferentialTrustingNode extends UnicastRemoteObject implements Tru
 
     private List<String> sureEvents;
     private List<String> highProbabilityEvents;
+    private Map<Integer, String> typesOfTrustSupportedByNode;
 
     private DifferentialTrustingNode() throws RemoteException {
         super();
@@ -23,6 +24,10 @@ public class DifferentialTrustingNode extends UnicastRemoteObject implements Tru
                 "ACCIDENT- PERSONAL INJURY", "ACCIDENT- PROPERY DAMAGE", "ANIMAL BITE/ATTACK", "ASSIST FIRE", "ASSIST OTHER DEPT", "ASSIST PUBLIC", "BURGLARY", "CASE FOLLOW UP",
                 "CRIMINAL MISCHIEF", "DRUG LAB", "HOSTAGE SITUATION", "INTOXICATED PERSON", "INVESTIGATION", "KIDNAPPING", "ROBBERY", "SHOOTING", "STABBING", "SUICIDE",
                 "THEFT", "THEFT FROM VEHICLE", "TOW RELEASE", "WEAPONS COMPLAINT"));
+        this.typesOfTrustSupportedByNode = new LinkedHashMap<>();
+        this.typesOfTrustSupportedByNode.put(1, "Differential Trust");
+        this.typesOfTrustSupportedByNode.put(2, "Optimistic Trust");
+        this.typesOfTrustSupportedByNode.put(3, "Pessimistic Trust");
     }
 
     private List<String> getSureEvents() {
@@ -33,10 +38,29 @@ public class DifferentialTrustingNode extends UnicastRemoteObject implements Tru
         return highProbabilityEvents;
     }
 
+    private Map<Integer, String> getTypesOfTrustSupportedByNode() {
+        return typesOfTrustSupportedByNode;
+    }
 
     @Override
-    public int evaluateDataEntry(String dataEntryToBeProcessed) throws RemoteException {
+    public int evaluateDataEntry(String dataEntryToBeProcessed, int trustTypeSelector) throws RemoteException {
         //System.out.println("Request received!");
+
+        switch (trustTypeSelector) {
+            case 1: return differentialTrust(dataEntryToBeProcessed);
+            case 2: return optimisticTrust();
+            case 3: return pessimisticTrust();
+            default: return 0;
+        }
+    }
+
+    @Override
+    public Map<Integer, String> requestTypesOfTrustSupportedByNode() throws RemoteException {
+        return getTypesOfTrustSupportedByNode();
+    }
+
+    private int differentialTrust(String dataEntryToBeProcessed) {
+        System.out.print("Differential Trust: ");
         String decryptedMessage = decryptReceivedMessage(dataEntryToBeProcessed);
         String[] splitRecord = decryptedMessage.split(",", 7);
         String typeOfEvent = splitRecord[5];
@@ -44,23 +68,40 @@ public class DifferentialTrustingNode extends UnicastRemoteObject implements Tru
         //System.out.println("typeOfEvent: "+typeOfEvent);
         Random rand = new Random();
         if (getSureEvents().contains(typeOfEvent)) {
-            System.out.println("sure event");
+            System.out.print("sure event\n");
             return 1;
         }
 
         if (getHighProbabilityEvents().contains(typeOfEvent)) {
             if ((rand.nextInt(100)+1)<85){ // Choose 85% of the inputs to be trustworthy (High percentage)
-                System.out.println("high probability event");
+                System.out.print("high probability event\n");
                 return 1;
             }
         }
 
         if ((rand.nextInt(100)+1)<51) { // Choose 50% of the inputs to be trustworthy (medium percentage)
-            System.out.println("Medium probability event");
+            System.out.print("Medium probability event\n");
             return 1;
         }
 
         return -1;
+
+    }
+
+    private int optimisticTrust() {
+        Random rand = new Random();
+        System.out.println("Optimistic Trust");
+
+        // Choose 85% of the inputs to be trustworthy (High percentage)
+        return (rand.nextInt(100)+1)<85 ? 1 : -1;
+    }
+
+    private int pessimisticTrust() {
+        Random rand = new Random();
+        System.out.println("Pessimistic Trust");
+
+        // Choose 85% of the inputs to be trustworthy (High percentage)
+        return (rand.nextInt(100)+1)<25 ? 1 : -1;
     }
 
     //This method decrypt a string

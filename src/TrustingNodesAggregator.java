@@ -8,10 +8,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -56,6 +53,17 @@ public class TrustingNodesAggregator {
     private void processData(String fileName) {
         Queue<String> inputDataStructure = readFromDataSource(fileName);
         Queue<String> outputDataStructure = new ArrayDeque<>();
+        Map<Integer, String> typesOfTrustSupportedByNode;
+        int trustType=1;
+        try {
+            typesOfTrustSupportedByNode = differentialTrustingNode.requestTypesOfTrustSupportedByNode();
+            trustType = selectTrustType(typesOfTrustSupportedByNode);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        final int trustTypeSelector =  trustType;
+
         //The first line read is the table header that needs to be skipped;
         String inputData = inputDataStructure.poll();
         inputData = inputDataStructure.poll();
@@ -80,7 +88,7 @@ public class TrustingNodesAggregator {
 
                     trustNodesExecutor.submit(() -> {
                         try {
-                            final int value1 = differentialTrustingNode.evaluateDataEntry(message);
+                            final int value1 = differentialTrustingNode.evaluateDataEntry(message, trustTypeSelector);
                             setTrustValue1(value1);
                         } catch (RemoteException e) {
                             e.printStackTrace();
@@ -90,7 +98,7 @@ public class TrustingNodesAggregator {
                     //differentialTrustingNode can be replaced with the other trust nodes that will be created
                     trustNodesExecutor.submit(() -> {
                         try {
-                            final int value2 = differentialTrustingNode.evaluateDataEntry(message);
+                            final int value2 = differentialTrustingNode.evaluateDataEntry(message, trustTypeSelector+1);
                             setTrustValue2(value2);
                         } catch (RemoteException e) {
                             e.printStackTrace();
@@ -100,7 +108,7 @@ public class TrustingNodesAggregator {
                     //differentialTrustingNode can be replaced with the other trust nodes that will be created
                     trustNodesExecutor.submit(() -> {
                         try {
-                            final int value3 = differentialTrustingNode.evaluateDataEntry(message);
+                            final int value3 = differentialTrustingNode.evaluateDataEntry(message, trustTypeSelector+2);
                             setTrustValue3(value3);
                         } catch (RemoteException e) {
                             e.printStackTrace();
@@ -115,12 +123,14 @@ public class TrustingNodesAggregator {
                 waitingForATrustValue = processingTime < 100;
 
                 if (waitingForATrustValue) {
+                    //If all the trust nodes returned a value, then exit the loop even there is still time left
                     if ((getTrustValue1() != 0) && (getTrustValue2() != 0) && (getTrustValue3() != 0)) {
                         waitingForATrustValue = false;
                     }
                 }
 
                 if (!waitingForATrustValue) {
+                    //If the processing time expired, then stay in the loop until one trust node returns a result
                     if ((getTrustValue1() == 0) && (getTrustValue2() == 0) && (getTrustValue3() == 0)) {
                         waitingForATrustValue = true;
                     }
@@ -150,6 +160,11 @@ public class TrustingNodesAggregator {
 
         saveToOutputFormat(outputDataStructure, fileName);
 
+    }
+
+    private int selectTrustType(Map<Integer, String> typesOfTrustSupportedByNode) {
+        System.out.println("Types of Trust supported by the node: "+ typesOfTrustSupportedByNode);
+        return 1;
     }
 
     private void saveToOutputFormat(Queue<String> outputDataStructure, String fileName) {
