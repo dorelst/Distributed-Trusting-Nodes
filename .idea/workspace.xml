@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1df2081b-04e9-49aa-9710-d242479c25a9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/SecondTrustingNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ThirdTrustingNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Distributed Trusting Nodes/DifferentialTrustingNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Distributed Trusting Nodes/DifferentialTrustingNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DifferentialTrustingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DifferentialTrustingNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EMATrustingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EMATrustingNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TrustingNodesAggregator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrustingNodesAggregator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,6 +51,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="EMATrustingNode" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="EMATrustingNode" />
+      <module name="Distributed Trusting Nodes" />
+      <option name="VM_PARAMETERS" value="-Djava.security.policy=server.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SecondTrustingNode" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="SecondTrustingNode" />
       <module name="Distributed Trusting Nodes" />
@@ -73,6 +79,7 @@
       <item itemvalue="Application.DifferentialTrustingNode" />
       <item itemvalue="Application.SecondTrustingNode" />
       <item itemvalue="Application.TrustingNodesAgreggator" />
+      <item itemvalue="Application.EMATrustingNode" />
     </list>
   </component>
   <component name="ServiceViewManager">
@@ -126,40 +133,42 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="254" y="84" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575574871053">
-      <screen x="0" y="0" width="1600" height="860" />
+    <state x="-2154" y="-235" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575736899310">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
     </state>
+    <state x="-2154" y="-235" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575736899310" />
     <state x="254" y="84" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1600.860@0.0.1600.860" timestamp="1575574871053" />
     <state x="-1893" y="80" key="#com.intellij.ide.util.MemberChooser" timestamp="1575512783160">
       <screen x="-2560" y="-371" width="2560" height="1390" />
     </state>
     <state x="-1893" y="80" key="#com.intellij.ide.util.MemberChooser/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575512783160" />
-    <state x="529" y="213" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1575574854508">
-      <screen x="0" y="0" width="1600" height="860" />
+    <state x="-1714" y="-27" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1575736882516">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
     </state>
+    <state x="-1714" y="-27" key="#com.intellij.ide.util.TreeClassChooserDialog/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575736882516" />
     <state x="529" y="213" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1600.860@0.0.1600.860" timestamp="1575574854508" />
-    <state width="1493" height="146" key="GridCell.Tab.0.bottom" timestamp="1575576020191">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="1574" height="235" key="GridCell.Tab.0.bottom" timestamp="1575737059991">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
     </state>
-    <state width="1671" height="264" key="GridCell.Tab.0.bottom/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575513590683" />
+    <state width="1574" height="235" key="GridCell.Tab.0.bottom/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575737059991" />
     <state width="1493" height="146" key="GridCell.Tab.0.bottom/0.0.1536.824/-1920.0.1920.1040/1920.0.1920.1040@0.0.1536.824" timestamp="1575576020191" />
     <state width="1340" height="206" key="GridCell.Tab.0.bottom/0.0.1600.860@0.0.1600.860" timestamp="1575575167304" />
-    <state width="1493" height="146" key="GridCell.Tab.0.center" timestamp="1575576020190">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="1574" height="235" key="GridCell.Tab.0.center" timestamp="1575737059991">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
     </state>
-    <state width="1671" height="264" key="GridCell.Tab.0.center/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575513590683" />
+    <state width="1574" height="235" key="GridCell.Tab.0.center/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575737059991" />
     <state width="1493" height="146" key="GridCell.Tab.0.center/0.0.1536.824/-1920.0.1920.1040/1920.0.1920.1040@0.0.1536.824" timestamp="1575576020190" />
     <state width="1340" height="206" key="GridCell.Tab.0.center/0.0.1600.860@0.0.1600.860" timestamp="1575575167304" />
-    <state width="1493" height="146" key="GridCell.Tab.0.left" timestamp="1575576020190">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="1574" height="235" key="GridCell.Tab.0.left" timestamp="1575737059991">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
     </state>
-    <state width="1671" height="264" key="GridCell.Tab.0.left/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575513590682" />
+    <state width="1574" height="235" key="GridCell.Tab.0.left/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575737059991" />
     <state width="1493" height="146" key="GridCell.Tab.0.left/0.0.1536.824/-1920.0.1920.1040/1920.0.1920.1040@0.0.1536.824" timestamp="1575576020190" />
     <state width="1340" height="206" key="GridCell.Tab.0.left/0.0.1600.860@0.0.1600.860" timestamp="1575575167303" />
-    <state width="1493" height="146" key="GridCell.Tab.0.right" timestamp="1575576020191">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="1574" height="235" key="GridCell.Tab.0.right" timestamp="1575737059991">
+      <screen x="-2560" y="-371" width="2560" height="1390" />
     </state>
-    <state width="1671" height="264" key="GridCell.Tab.0.right/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575513590683" />
+    <state width="1574" height="235" key="GridCell.Tab.0.right/-2560.-371.2560.1390/0.0.1536.824@-2560.-371.2560.1390" timestamp="1575737059991" />
     <state width="1493" height="146" key="GridCell.Tab.0.right/0.0.1536.824/-1920.0.1920.1040/1920.0.1920.1040@0.0.1536.824" timestamp="1575576020191" />
     <state width="1340" height="206" key="GridCell.Tab.0.right/0.0.1600.860@0.0.1600.860" timestamp="1575575167304" />
     <state width="1629" height="418" key="GridCell.Tab.1.bottom" timestamp="1575485776232">
