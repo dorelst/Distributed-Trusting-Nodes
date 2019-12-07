@@ -91,9 +91,13 @@ public class TrustingNodesAggregator {
 
             public void run(){
                 String inputData;
-                while(!(inputData = input.poll()).equals("DONE")){
+                while(true){
+                    inputData = imput.poll();
                     if(inputData == null){
                         Thread.sleep(10);
+                        continue;
+                    }
+                    if (inputData.equals("DONE")){
                         break;
                     }
                     try{
@@ -135,7 +139,15 @@ public class TrustingNodesAggregator {
             public void run(){
                 String inputData;
                 try(BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFileName), StandardCharsets.UTF_8))){
-                    while(!(inputData = input.poll()).equals("DONE")){
+                    while(true){
+                        inputData = input.poll();
+                        if (inputData == null){
+                            Thread.sleep(10);
+                            continue;
+                        }
+                        if (inputData.equals("DONE")){
+                            break;
+                        }
                         // if any output queues are empty, wait 10 ms to allow catchup
                         while(!allQueuesHaveData()){
                             try{
