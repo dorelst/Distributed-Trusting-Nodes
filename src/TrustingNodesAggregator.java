@@ -92,6 +92,10 @@ public class TrustingNodesAggregator {
             public void run(){
                 String inputData;
                 while(!(inputData = input.poll()).equals("DONE")){
+                    if(inputData == null){
+                        Thread.sleep(10);
+                        break;
+                    }
                     try{
                         int result = remote.evaluateDataEntry(inputData, 1);
                         output.offer(result);
