@@ -92,9 +92,13 @@ public class TrustingNodesAggregator {
             public void run(){
                 String inputData;
                 while(true){
-                    inputData = imput.poll();
+                    inputData = input.poll();
                     if(inputData == null){
-                        Thread.sleep(10);
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         continue;
                     }
                     if (inputData.equals("DONE")){
@@ -165,7 +169,7 @@ public class TrustingNodesAggregator {
                             out.write(inputData + "\n");
                         }
                     }
-                } catch (IOException e){
+                } catch (IOException | InterruptedException e){
                     e.printStackTrace();
                 }
             }
@@ -224,8 +228,8 @@ public class TrustingNodesAggregator {
         try {
             System.out.println("Looking for the Server");
             String name1 = "//in-csci-rrpc02.cs.iupui.edu/DifferentialTrustingNode";
-            String name2 = "//in-csci-rrpc03.cs.iupui.edu/SecondTrustingNode";
-            String name3 = "//in-csci-rrpc04.cs.iupui.edu/SecondTrustingNode";
+            String name2 = "//in-csci-rrpc03.cs.iupui.edu/EMATrustingNode";
+            String name3 = "//in-csci-rrpc04.cs.iupui.edu/ThirdTrustingNode";
             //String name1 = "//DStoian-LEN/DifferentialTrustingNode";
             //String name2 = "//DStoian-HP/SecondTrustingNode";
             //String name = "//Doru-PC/DifferentialTrustingNode";
