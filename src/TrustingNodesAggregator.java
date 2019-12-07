@@ -12,221 +12,172 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.lang.Thread;
 
 public class TrustingNodesAggregator {
-    private static ExecutorService trustNodesExecutor = Executors.newFixedThreadPool(4);
-    private int trustValue1, trustValue2, trustValue3;
-    private Set<Integer> selectedTrust;
 
-    private static TrustingNodes differentialTrustingNode, secondTrustingNode, thirdTrustingNode;
+    private List<TrustingNodes> remotes;
+    private List<Queue<String>> inputs;
+    private List<Queue<Integer>> outputs;
 
-    private TrustingNodesAggregator() {
-        super();
-        this.trustValue1 = 0;
-        this.trustValue2 = 0;
-        this.trustValue3 = 0;
-        this.selectedTrust = new HashSet<>();
-    }
-
-    private void setTrustValue1(int trustValue1) {
-        this.trustValue1 = trustValue1;
-    }
-
-    private void setTrustValue2(int trustValue2) {
-        this.trustValue2 = trustValue2;
-    }
-
-    private void setTrustValue3(int trustVAlue3) {
-        this.trustValue3 = trustVAlue3;
-    }
-
-    private int getTrustValue1() {
-        return trustValue1;
-    }
-
-    private int getTrustValue2() {
-        return trustValue2;
-    }
-
-    private int getTrustValue3() {
-        return trustValue3;
-    }
-
-    public Set<Integer> getSelectedTrust() {
-        return selectedTrust;
+    private TrustingNodesAggregator(List<TrustingNodes> remotes) {
+        this.remotes = remotes;
+        this.inputs = new ArrayList<Queue<String>>(remotes.size() + 1);
+        this.outputs = new ArrayList<Queue<Integer>>(remotes.size());
+        for (int i = 0; i < remotes.size(); i++){
+            this.inputs.add(new ConcurrentLinkedQueue<String>());
+            this.outputs.add(new ConcurrentLinkedQueue<Integer>());
+        }
+        // we need one additional input for the combiner to write to the output
+        this.inputs.add(new ConcurrentLinkedQueue<String>());
     }
 
     private void processData(String fileName) {
-        Queue<String> inputDataStructure = readFromDataSource(fileName);
-        Queue<String> outputDataStructure = new ArrayDeque<>();
-        Map<Integer, String> typesOfTrustSupportedByNode1, typesOfTrustSupportedByNode2, typesOfTrustSupportedByNode3;
-        int trustType1 = 1;
-        int trustType2 = 1;
-        int trustType3 = 1;
-        try {
-            typesOfTrustSupportedByNode1 = differentialTrustingNode.requestTypesOfTrustSupportedByNode();
-            trustType1 = selectTrustType(typesOfTrustSupportedByNode1);
-            typesOfTrustSupportedByNode2 = secondTrustingNode.requestTypesOfTrustSupportedByNode();
-            trustType2 = selectTrustType(typesOfTrustSupportedByNode2);
-            typesOfTrustSupportedByNode3 = thirdTrustingNode.requestTypesOfTrustSupportedByNode();
-            trustType3 = selectTrustType(typesOfTrustSupportedByNode3);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        List<Thread> threads = new ArrayList<Thread>(remotes.size() + 2);
+        String outputFileName = "Processed_" + fileName;
+
+        /*
+         * This class is a runnable that will read all the lines of the
+         * input file, and popuate each processor threads input queues
+         * with the file data
+         */
+        class Injester implements Runnable{
+            private String filename;
+            private List<Queue<String>> inputs;
+            
+            public Injester(String filename, List<Queue<String>> inputs){
+                this.filename = filename;
+                this.inputs = inputs;
+            }
+
+            public void run(){
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8))) {
+                    String line;
+                    // The first line read is the table header that needs to be skipped
+                    in.readLine();
+                    while ((line=in.readLine()) != null){
+                        for (Queue<String> q : inputs){
+                            q.offer(line);
+                        }
+                    }
+                    for (Queue<String> q : inputs){
+                        q.offer("DONE");
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
-        final int trustTypeSelector1 =  trustType1;
-        final int trustTypeSelector2 =  trustType2;
-        final int trustTypeSelector3 =  trustType3;
+        /*
+         * This class is a runnable that will injest file data from a queue,
+         * send that data to a remote trust node to be evaluated, then put
+         * that trust result into a queue for combining
+         */
+        class Processor implements Runnable{
+            private Queue<String> input;
+            private Queue<Integer> output;
+            private TrustingNodes remote;
 
-        //The first line read is the table header that needs to be skipped;
-        String inputData = inputDataStructure.poll();
-        inputData = inputDataStructure.poll();
-        //The while loop goes through the entire ArrayDeque, and sends each value to be processed
-        while (inputData != null) {
+            public Processor(Queue<String> input, Queue<Integer> output, TrustingNodes remote){
+                this.input = input;
+                this.output = output;
+                this.remote = remote;
+            }
 
-            boolean sendProcessingRequest = true;
-
-            long endTime;
-            long processingTime;
-            boolean waitingForATrustValue = true;
-
-            //System.out.println("inputData = \n"+inputData);
-            final String message = encryptOutGoingMessage(inputData);
-
-            long startTime = System.nanoTime();
-            //The do-while loop keeps running until all trust nodes sent their values or until waiting time expires, and
-            //you have at least one trust value
-            do {
-                //The threads that runs the Trust Nodes are started on the first loop of do-while
-                if (sendProcessingRequest) {
-
-                    trustNodesExecutor.submit(() -> {
-                        try {
-                            final int value1 = differentialTrustingNode.evaluateDataEntry(message, trustTypeSelector1);
-                            setTrustValue1(value1);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    });
-
-                    //differentialTrustingNode can be replaced with the other trust nodes that will be created
-                    trustNodesExecutor.submit(() -> {
-                        try {
-                            final int value2 = secondTrustingNode.evaluateDataEntry(message, trustTypeSelector2);
-                            setTrustValue2(value2);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    });
-
-                    //differentialTrustingNode can be replaced with the other trust nodes that will be created
-                    trustNodesExecutor.submit(() -> {
-                        try {
-                            final int value3 = thirdTrustingNode.evaluateDataEntry(message, trustTypeSelector3);
-                            setTrustValue3(value3);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    });
-
-                    sendProcessingRequest = false;
-                }
-                endTime = System.nanoTime();
-                processingTime = endTime-startTime;
-                processingTime = TimeUnit.NANOSECONDS.toMillis(processingTime);
-                waitingForATrustValue = processingTime < 100;
-
-                if (waitingForATrustValue) {
-                    //If all the trust nodes returned a value, then exit the loop even there is still time left
-                    if ((getTrustValue1() != 0) && (getTrustValue2() != 0) && (getTrustValue3() != 0)) {
-                        waitingForATrustValue = false;
+            public void run(){
+                String inputData;
+                while(!(inputData = input.poll()).equals("DONE")){
+                    try{
+                        int result = remote.evaluateDataEntry(inputData, 1);
+                        output.offer(result);
+                    } catch (RemoteException e){
+                        e.printStackTrace();
                     }
                 }
+            }
+        }
 
-                if (!waitingForATrustValue) {
-                    //If the processing time expired, then stay in the loop until one trust node returns a result
-                    if ((getTrustValue1() == 0) && (getTrustValue2() == 0) && (getTrustValue3() == 0)) {
-                        waitingForATrustValue = true;
+        /*
+         * This class is a runnable that will combine all the trust results
+         * generated by the remotes, and use that data to decide weither or
+         * not to trust a piece of input data. If so, it will write that data
+         * to the output file, if not, it will discard it
+         */
+        class Combiner implements Runnable{
+            private Queue<String> input;
+            private List<Queue<Integer>> outputs;
+            private String outputFileName;
+
+            public Combiner(Queue<String> input, List<Queue<Integer>> outputs, String outputFileName){
+                this.input = input;
+                this.outputs = outputs;
+                this.outputFileName = outputFileName;
+            }
+
+            private boolean allQueuesHaveData(){
+                for(Queue<Integer> q : outputs){
+                    if (q.peek() == null){
+                        return false;
                     }
                 }
-                //System.out.println("Waiting for a trust value");
-
-            } while (waitingForATrustValue);
-
-            double trustValue = 0.33 * getTrustValue1() + 0.33 * getTrustValue2() + 0.33 * getTrustValue3();
-/*
-            System.out.println("TrustValue = "+trustValue+" trustValue1 = "+getTrustValue1()+" trustValue2 = "+getTrustValue2()+" trustValue3 = "+getTrustValue3());
-            System.out.println("timepassed = "+processingTime);
-*/
-
-
-            if (trustValue >= 0) {
-                outputDataStructure.offer(inputData);
+                return true;
             }
-            inputData = inputDataStructure.poll();
-            setTrustValue1(0);
-            setTrustValue2(0);
-            setTrustValue3(0);
-            //System.out.println("Entry line has been processed");
+
+            public void run(){
+                String inputData;
+                try(BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFileName), StandardCharsets.UTF_8))){
+                    while(!(inputData = input.poll()).equals("DONE")){
+                        // if any output queues are empty, wait 10 ms to allow catchup
+                        while(!allQueuesHaveData()){
+                            try{
+                                Thread.sleep(10);
+                            } catch (Exception e){
+                                // swallow exceptions
+                            }
+                        }
+                        double p = 0.0;
+                        for(Queue<Integer> q : outputs){
+                            p = p + q.poll();
+                        }
+                        p = p / outputs.size();
+                        if (p < 0){
+                            out.write(inputData + "\n");
+                        }
+                    }
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
         }
-        System.out.println("File processed");
-        trustNodesExecutor.shutdown();
+        
+        Thread t;
+        t = new Thread(new Injester(fileName, inputs));
+        t.start();
+        threads.add(t);
 
-        saveToOutputFormat(outputDataStructure, fileName);
-
-    }
-
-    private int selectTrustType(Map<Integer, String> typesOfTrustSupportedByNode) {
-        System.out.println("Types of Trust supported by the node: "+ typesOfTrustSupportedByNode);
-        //This a stub functionality that needs to be extended: to avoid running on multiple nodes the same type of trust
-        //If a trust type has been selected it is added to selectedTrust Set and for the other nodes
-        //the user shouldn't have that functionality available for selection
-        Random rand = new Random();
-        boolean selectATrust = true;
-        int trustType;
-        do {
-            trustType = rand.nextInt(3)+1;
-            //System.out.println("trustType = "+trustType);
-            if (!getSelectedTrust().contains(trustType)) {
-                getSelectedTrust().add(trustType);
-                selectATrust = false;
-            }
-
-        } while (selectATrust);
-
-        //System.out.println("selected Trust = "+getSelectedTrust());
-
-        return trustType;
-    }
-
-    private void saveToOutputFormat(Queue<String> outputDataStructure, String fileName) {
-        System.out.println("Writing to file...");
-        String name = "processed_"+fileName;
-
-        try(BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(name), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line=outputDataStructure.poll())!=null) {
-                line=line+"\n";
-                out.write(line);
-                //System.out.println("line: "+line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        for(int i = 0; i < remotes.size(); i++){
+            t = new Thread(new Processor(inputs.get(i), outputs.get(i), remotes.get(i)));
+            t.start();
+            threads.add(t);
         }
-        System.out.println("Processed file saved!");
-    }
 
-    private Queue<String> readFromDataSource(String fileName) {
-        Queue<String> dataStructure = new ArrayDeque<>();
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line=in.readLine()) != null){
-                dataStructure.offer(line);
+        t = new Thread(new Combiner(inputs.get(remotes.size()), outputs, outputFileName));
+        t.start();
+        threads.add(t);
+
+        // now that all the threads are going, we just need to wait for them all to finish
+        for(Thread td : threads){
+            try{
+                td.join();
+            } catch (Exception e){
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return dataStructure;
     }
 
     //This method encrypt the message sent to the client for transfer a file or a subset
@@ -263,15 +214,16 @@ public class TrustingNodesAggregator {
             //String name2 = "//DStoian-HP/SecondTrustingNode";
             //String name = "//Doru-PC/DifferentialTrustingNode";
             //String name = "//LAPTOP-GDTMA4IQ/DifferentialTrustingNode";
-            differentialTrustingNode = (TrustingNodes) Naming.lookup(name1);
+            List<TrustingNodes> remotes = new ArrayList<TrustingNodes>();
+            remotes.add((TrustingNodes) Naming.lookup(name1));
             System.out.println("Binding to the differentialTrustingNode server");
-            secondTrustingNode = (TrustingNodes) Naming.lookup(name2);
+            remotes.add((TrustingNodes) Naming.lookup(name2));
             System.out.println("Binding to the secondTrustingNode server");
-            thirdTrustingNode = (TrustingNodes) Naming.lookup(name3);
+            remotes.add((TrustingNodes) Naming.lookup(name3));
             System.out.println("Binding to the thirdTrustingNode server");
             //For now the file name to be processed is hard coded
             String fileName = "Hamilton_County_Sheriff.csv";
-            TrustingNodesAggregator trustingNodesAggregator = new TrustingNodesAggregator();
+            TrustingNodesAggregator trustingNodesAggregator = new TrustingNodesAggregator(remotes);
             trustingNodesAggregator.processData(fileName);
         } catch (RemoteException | NotBoundException | MalformedURLException ex) {
             ex.printStackTrace();
