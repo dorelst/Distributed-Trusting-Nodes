@@ -88,20 +88,42 @@ public class TrustingNodesAggregator {
                 this.output = output;
                 this.remote = remote;
             }
+//This method encrypt the message sent to the client for transfer a file or a subset
+    private String encryptOutGoingMessage(String message) {
+        String secret = "qwertyuiopasdfgh";
+        byte[] decodedKey = Base64.getDecoder().decode(secret);
+        SecretKey secretKey;
+
+        try {
+            Cipher myCipher = Cipher.getInstance("AES");
+            secretKey = new SecretKeySpec(Arrays.copyOf(decodedKey, 16), "AES");
+            myCipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] bytesToBeEncrypted = message.getBytes("UTF-8");
+            byte[] encryptedBytes = myCipher.doFinal(bytesToBeEncrypted);
+            return Base64.getEncoder().encodeToString(encryptedBytes);
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
             public void run(){
                 String inputData;
                 while(true){
-                    inputData = imput.poll();
+                    inputData = input.poll();
                     if(inputData == null){
-                        Thread.sleep(10);
+			try{
+			    Thread.sleep(10);
+			} catch (Exception e){
+			    e.printStackTrace();
+			}
                         continue;
                     }
                     if (inputData.equals("DONE")){
                         break;
                     }
                     try{
-                        int result = remote.evaluateDataEntry(inputData, 1);
+                        int result = remote.evaluateDataEntry(encryptOutGoingMessage(inputData), 1);
                         output.offer(result);
                     } catch (RemoteException e){
                         e.printStackTrace();
@@ -142,7 +164,11 @@ public class TrustingNodesAggregator {
                     while(true){
                         inputData = input.poll();
                         if (inputData == null){
-                            Thread.sleep(10);
+			    try{
+				Thread.sleep(10);
+			    } catch (Exception e){
+				e.printStackTrace();
+			    }
                             continue;
                         }
                         if (inputData.equals("DONE")){
@@ -242,6 +268,7 @@ public class TrustingNodesAggregator {
             TrustingNodesAggregator trustingNodesAggregator = new TrustingNodesAggregator(remotes);
             trustingNodesAggregator.processData(fileName);
         } catch (RemoteException | NotBoundException | MalformedURLException ex) {
+	    System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
     }

@@ -67,7 +67,7 @@ public class EMATrustingNode extends UnicastRemoteObject implements TrustingNode
     }
 
     public Map<Integer, String> requestTypesOfTrustSupportedByNode() throws RemoteException{
-        return new HashMap<>() {{ put(1, "EMA"); }};
+        return new HashMap<Integer, String>() {{ put(1, "EMA"); }};
     }
     
     //This method decrypt a string
