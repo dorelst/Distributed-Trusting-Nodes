@@ -54,7 +54,7 @@ public class EMATrustingNode extends UnicastRemoteObject implements TrustingNode
         }
     }
 
-    public int evaluateDataEntry(String dataEntryToBeProcessed, int trustNodeSelector) throws RemoteException{
+    public int evaluateDataEntry(String dataEntryToBeProcessed) throws RemoteException{
         String decryptedMessage = decryptReceivedMessage(dataEntryToBeProcessed);
         String[] splitRecord = decryptedMessage.split(",", 7);
         String typeOfEvent = splitRecord[5];
@@ -65,11 +65,7 @@ public class EMATrustingNode extends UnicastRemoteObject implements TrustingNode
             return -1;
         }
     }
-
-    public Map<Integer, String> requestTypesOfTrustSupportedByNode() throws RemoteException{
-        return new HashMap<Integer, String>() {{ put(1, "EMA"); }};
-    }
-    
+   
     //This method decrypt a string
     private String decryptReceivedMessage (String message) {
         String secret = "qwertyuiopasdfgh";
