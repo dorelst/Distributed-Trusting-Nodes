@@ -67,7 +67,7 @@ public class EMATrustingNode extends UnicastRemoteObject implements TrustingNode
     }
 
     public Map<Integer, String> requestTypesOfTrustSupportedByNode() throws RemoteException{
-        return new HashMap<>() {{ put(1, "EMA"); }};
+        return new HashMap<Integer, String>() {{ put(1, "EMA"); }};
     }
     
     //This method decrypt a string
@@ -106,9 +106,9 @@ public class EMATrustingNode extends UnicastRemoteObject implements TrustingNode
             System.out.println("Creating Detection Nodes Server!");
             String name = "EMATrustingNode";
             emaTrustingNode = new EMATrustingNode();
-            System.out.println("Differential Trusting Node: binding it to name: " + name);
+            System.out.println("EMA Trusting Node: binding it to name: " + name);
             Naming.rebind(name, emaTrustingNode);
-            System.out.println("Differential Trusting Node Server Ready!");
+            System.out.println("EMA Trusting Node: Server Ready!");
         } catch (RemoteException | MalformedURLException e) {
             System.out.println("Exception Occured: " + e.getMessage());
             e.printStackTrace();
