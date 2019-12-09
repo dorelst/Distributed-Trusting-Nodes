@@ -223,25 +223,6 @@ public class TrustingNodesAggregator {
         }
     }
 
-    //This method encrypt the message sent to the client for transfer a file or a subset
-    private String encryptOutGoingMessage(String message) {
-        String secret = "qwertyuiopasdfgh";
-        byte[] decodedKey = Base64.getDecoder().decode(secret);
-        SecretKey secretKey;
-
-        try {
-            Cipher myCipher = Cipher.getInstance("AES");
-            secretKey = new SecretKeySpec(Arrays.copyOf(decodedKey, 16), "AES");
-            myCipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            byte[] bytesToBeEncrypted = message.getBytes("UTF-8");
-            byte[] encryptedBytes = myCipher.doFinal(bytesToBeEncrypted);
-            return Base64.getEncoder().encodeToString(encryptedBytes);
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
 
     public static void main(String[] args) {
         System.out.println("Set security policy file");

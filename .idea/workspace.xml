@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1df2081b-04e9-49aa-9710-d242479c25a9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Distributed Trusting Nodes/DifferentialTrustingNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Distributed Trusting Nodes/DifferentialTrustingNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EMATrustingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EMATrustingNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DifferentialTrustingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DifferentialTrustingNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TrustingNodesAggregator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrustingNodesAggregator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
