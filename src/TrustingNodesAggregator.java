@@ -37,6 +37,10 @@ public class TrustingNodesAggregator {
     }
 
     private void processData(String fileName) {
+        long endTime;
+        long processingTime;
+        long startTime = System.nanoTime();
+
         List<Thread> threads = new ArrayList<Thread>(remotes.size() + 2);
         String outputFileName = "Processed_" + fileName;
 
@@ -221,6 +225,11 @@ public class TrustingNodesAggregator {
                 e.printStackTrace();
             }
         }
+
+        endTime = System.nanoTime();
+        processingTime = endTime-startTime;
+        processingTime = TimeUnit.NANOSECONDS.toMillis(processingTime);
+        System.out.println("Processing time = "+processingTime+" miliseconds");
     }
 
 

@@ -1,0 +1,4 @@
+Thre Trusting nodes (Dif, EMA, Pessm): time: 15,010 ms	input: 54,015 entries	generated: 11,175 entries
+One Trusting node (Dif): time: 16,342 ms input: 54,015 entries generated: 45,967 entries
+One Trusting node (EMA): time: 16,077 ms input: 54,015 entries generated: 60 entries
+One Trusting node (Pessm): time: 14,893 ms input: 54,015 entries generated: 12,928 entries
