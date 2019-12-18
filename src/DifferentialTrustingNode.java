@@ -58,11 +58,6 @@ public class DifferentialTrustingNode extends UnicastRemoteObject implements Tru
             return 1;
         }
 
-        if ((rand.nextInt(100)+1)<16) { // Choose 15% of the inputs to be trustworthy (low percentage)
-            System.out.print("Medium probability event\n");
-            return 1;
-        }
-
         return -1;
 
     }
