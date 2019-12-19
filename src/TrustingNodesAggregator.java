@@ -243,10 +243,6 @@ public class TrustingNodesAggregator {
             String name1 = "//in-csci-rrpc02.cs.iupui.edu/DifferentialTrustingNode";
             String name2 = "//in-csci-rrpc03.cs.iupui.edu/EMATrustingNode";
             String name3 = "//in-csci-rrpc04.cs.iupui.edu/PessimisticTrustingNode";
-            //String name1 = "//DStoian-LEN/DifferentialTrustingNode";
-            //String name2 = "//DStoian-HP/SecondTrustingNode";
-            //String name = "//Doru-PC/DifferentialTrustingNode";
-            //String name = "//LAPTOP-GDTMA4IQ/DifferentialTrustingNode";
             List<TrustingNodes> remotes = new ArrayList<TrustingNodes>();
             remotes.add((TrustingNodes) Naming.lookup(name1));
             System.out.println("Binding to the differentialTrustingNode server");
@@ -255,7 +251,7 @@ public class TrustingNodesAggregator {
             remotes.add((TrustingNodes) Naming.lookup(name3));
             System.out.println("Binding to the thirdTrustingNode server");
             //For now the file name to be processed is hard coded
-            String fileName = "Hamilton_County_Sheriff.csv";
+            String fileName = "SampleData.csv";
             TrustingNodesAggregator trustingNodesAggregator = new TrustingNodesAggregator(remotes);
             trustingNodesAggregator.processData(fileName);
         } catch (RemoteException | NotBoundException | MalformedURLException ex) {
